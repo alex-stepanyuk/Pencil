@@ -1,0 +1,26 @@
+﻿<Window x:Name="Window1" x:Class="Pencil.MainWindow" Icon="pencil.ico"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Веселый карандаш 0.2" Height="350" Width="525" MinWidth="400" MinHeight="180">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+
+        <Canvas x:Name="Canvas1" Grid.Row="0" Grid.Column="1" MouseMove="OnMouseMove" MouseDown="OnMouseDown" Background="White" Grid.ColumnSpan="2" MouseUp="OnMouseUp">
+            <Rectangle/>
+        </Canvas>
+        
+        <StackPanel  Grid.Row="1" Grid.RowSpan="2" Orientation="Horizontal" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" Grid.ColumnSpan="2">
+            <StackPanel.BindingGroup>
+                <BindingGroup/>
+            </StackPanel.BindingGroup>
+            <Button x:Name="ButtonClean"  Content="Очистить"  Width="80" Height="25" VerticalAlignment="Top" Click="ButtonClean_Click" Margin="5,5,5,5" Background="{x:Null}" />
+            <Button x:Name="ButtonDel"  Content="Удалить"  Width="80" Height="25" VerticalAlignment="Top" Click="ButtonDel_Click" Margin="5,5,5,5" Background="{x:Null}" />
+            <Button x:Name="ButtonSelect"  Content="Выбрать"  Width="80" Height="25" VerticalAlignment="Top" Click="ButtonSelect_Click" Margin="5,5,5,5" Background="{x:Null}" />
+            <Label x:Name="label1" Content="hello" Margin="0,5,5,5" Padding="7,5,5,5" RenderTransformOrigin="5.802,0.47"/>
+            <Label x:Name="label2" Content="hello" Margin="0,5,5,5" Padding="7,5,5,5" RenderTransformOrigin="5.802,0.47"/>
+        </StackPanel>
+    </Grid>
+</Window>
