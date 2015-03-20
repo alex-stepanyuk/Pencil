@@ -23,9 +23,8 @@ namespace Pencil
         double x1, y1, x2, y2, oldX, oldY;
         int side = 0;
         Rectangle rectangle;
-        int isInto = -1;
+        int idInto = -1;
         bool figure = true;
-        Line line;
         Arrow arrow;
 
         public MainWindow()
@@ -33,6 +32,34 @@ namespace Pencil
             InitializeComponent();
             rectangle = new Rectangle();
             Canvas1.Children.Add(rectangle);
+        }
+
+        public void isInto(ref int idInto, ref int side)
+        {
+            double x1 = (Mouse.GetPosition(Canvas1)).X;
+            double y1 = (Mouse.GetPosition(Canvas1)).Y;
+
+            for (int i = Canvas1.Children.Count - 1; i >= 0; i--)
+            {
+                if (Canvas1.Children[i].GetType() == typeof(Rectangle))
+                {
+                    if ((Canvas.GetLeft(Canvas1.Children[i]) - 3 < x1) &&
+                        ((((Rectangle)Canvas1.Children[i]).Width + Canvas.GetLeft(Canvas1.Children[i]) + 3) > x1) &&
+                        (Canvas.GetTop(Canvas1.Children[i]) - 3 < y1) &&
+                        ((((Rectangle)Canvas1.Children[i]).Height + Canvas.GetTop(Canvas1.Children[i]) + 3) > y1))
+                    {
+                        idInto = i;
+                        if ((x1 >= Canvas.GetLeft(Canvas1.Children[i]) - 3) && (x1 <= Canvas.GetLeft(Canvas1.Children[i]) + 3)) side = 1;
+                        else if ((x1 >= ((Rectangle)Canvas1.Children[i]).Width + Canvas.GetLeft(Canvas1.Children[i]) - 3) && (x1 <= ((Rectangle)Canvas1.Children[i]).Width + Canvas.GetLeft(Canvas1.Children[i]) + 3)) side = 3;
+                        else if ((y1 >= Canvas.GetTop(Canvas1.Children[i]) - 3) && (y1 <= Canvas.GetTop(Canvas1.Children[i]) + 3)) side = 2;
+                        else if ((y1 >= ((Rectangle)Canvas1.Children[i]).Height + Canvas.GetTop(Canvas1.Children[i]) - 3) && (y1 <= ((Rectangle)Canvas1.Children[i]).Height + Canvas.GetTop(Canvas1.Children[i]) + 3)) side = 4;
+                        else side = 0;
+
+                        break;
+                    }
+                }
+                idInto = -1;
+            }
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
@@ -45,7 +72,7 @@ namespace Pencil
                 x2 = (e.GetPosition(Canvas1)).X;
                 y2 = (e.GetPosition(Canvas1)).Y;
 
-                if (isInto == -1)
+                if (idInto == -1)
                 {
                     if (x2 > x1) { rectangle.Width = x2 - x1; Canvas.SetLeft(rectangle, x1); }
                     else { rectangle.Width = x1 - x2; Canvas.SetLeft(rectangle, x2); }
@@ -58,14 +85,23 @@ namespace Pencil
                     switch (side)
                     {
                         case 0:
-                            Canvas.SetLeft(Canvas1.Children[isInto], x2 - oldX);
-                            Canvas.SetTop(Canvas1.Children[isInto], y2 - oldY);
+                            Canvas.SetLeft(Canvas1.Children[idInto], x2 - oldX);
+                            Canvas.SetTop(Canvas1.Children[idInto], y2 - oldY);
                             this.Cursor = Cursors.SizeAll;
-                            break;
-                        case 1: Canvas.SetLeft(Canvas1.Children[isInto], x2); ((Rectangle)Canvas1.Children[isInto]).Width = oldX - Canvas.GetLeft(Canvas1.Children[isInto]); break;
-                        case 2: Canvas.SetTop(Canvas1.Children[isInto], y2); ((Rectangle)Canvas1.Children[isInto]).Height = oldY - Canvas.GetTop(Canvas1.Children[isInto]); break;
-                        case 3: ((Rectangle)Canvas1.Children[isInto]).Width = x2 - Canvas.GetLeft(Canvas1.Children[isInto]); break;
-                        case 4: ((Rectangle)Canvas1.Children[isInto]).Height = y2 - Canvas.GetTop(Canvas1.Children[isInto]); break;
+
+                            for (int i = Canvas1.Children.Count - 1; i >= 0; i--)
+                            {
+                                if (Canvas1.Children[i].GetType() == typeof(Arrow))
+                                {
+                                    ((Arrow)Canvas1.Children[i]).Move();
+                                }
+                            }
+
+                        break;
+                        case 1: Canvas.SetLeft(Canvas1.Children[idInto], x2); ((Rectangle)Canvas1.Children[idInto]).Width = oldX - Canvas.GetLeft(Canvas1.Children[idInto]); break;
+                        case 2: Canvas.SetTop(Canvas1.Children[idInto], y2); ((Rectangle)Canvas1.Children[idInto]).Height = oldY - Canvas.GetTop(Canvas1.Children[idInto]); break;
+                        case 3: ((Rectangle)Canvas1.Children[idInto]).Width = x2 - Canvas.GetLeft(Canvas1.Children[idInto]); break;
+                        case 4: ((Rectangle)Canvas1.Children[idInto]).Height = y2 - Canvas.GetTop(Canvas1.Children[idInto]); break;
                     }
                 }
             }
@@ -81,59 +117,55 @@ namespace Pencil
         {
             x1 = (Mouse.GetPosition(Canvas1)).X;
             y1 = (Mouse.GetPosition(Canvas1)).Y;
+            
+            /*arrow = new Arrow();
+            arrow.Start = (Rectangle)Canvas1.Children[i];
+            arrow.Finish = (Rectangle)Canvas1.Children[i];
+            arrow.Move();
+            arrow.Stroke = Brushes.Black;
+            arrow.StrokeThickness = 2;
+            Canvas1.Children.Add(arrow);*/
 
-            for (int i = Canvas1.Children.Count - 1; i >= 0; i--)
+            isInto(ref idInto, ref side);
+
+            label2.Content = idInto + " | " + side;
+
+            if (figure)
             {
-                if (Canvas1.Children[i].GetType() == typeof(Rectangle))
+                if (idInto == -1)
                 {
-                    if ((Canvas.GetLeft(Canvas1.Children[i]) - 3 < x1) &&
-                        ((((Rectangle)Canvas1.Children[i]).Width + Canvas.GetLeft(Canvas1.Children[i]) + 3) > x1) &&
-                        (Canvas.GetTop(Canvas1.Children[i]) - 3 < y1) &&
-                        ((((Rectangle)Canvas1.Children[i]).Height + Canvas.GetTop(Canvas1.Children[i]) + 3) > y1))
-                    {
-                        isInto = i;
-                        if ((x1 >= Canvas.GetLeft(Canvas1.Children[i]) - 3) && (x1 <= Canvas.GetLeft(Canvas1.Children[i]) + 3)) side = 1;
-                        else if ((x1 >= ((Rectangle)Canvas1.Children[i]).Width + Canvas.GetLeft(Canvas1.Children[i]) - 3) && (x1 <= ((Rectangle)Canvas1.Children[i]).Width + Canvas.GetLeft(Canvas1.Children[i]) + 3)) side = 3;
-                        else if ((y1 >= Canvas.GetTop(Canvas1.Children[i]) - 3) && (y1 <= Canvas.GetTop(Canvas1.Children[i]) + 3)) side = 2;
-                        else if ((y1 >= ((Rectangle)Canvas1.Children[i]).Height + Canvas.GetTop(Canvas1.Children[i]) - 3) && (y1 <= ((Rectangle)Canvas1.Children[i]).Height + Canvas.GetTop(Canvas1.Children[i]) + 3)) side = 4;
-                        else side = 0;
-
-                        /*arrow = new Arrow();
-                        arrow.Start = (Rectangle)Canvas1.Children[i];
-                        arrow.Finish = (Rectangle)Canvas1.Children[i];
-                        arrow.Move();
-                        arrow.Stroke = Brushes.Black;
-                        arrow.StrokeThickness = 2;
-                        Canvas1.Children.Add(arrow);*/
-
-                        break;
-                    }
-                }
-                isInto = -1;
-            }
-
-            label2.Content = isInto + " | " + side;
-
-            if (isInto == -1)
-            {
-                rectangle = new Rectangle();
-                rectangle.Stroke = Brushes.Black;
-                rectangle.StrokeThickness = 3;
-                rectangle.Fill = new SolidColorBrush(Colors.Orange);
-                rectangle.Fill.Opacity = 0.9;
-                Canvas1.Children.Add(rectangle);
-            }
-            else
-            {
-                if (side == 0)
-                {
-                    oldX = x1 - Canvas.GetLeft(Canvas1.Children[isInto]);
-                    oldY = y1 - Canvas.GetTop(Canvas1.Children[isInto]);
+                    rectangle = new Rectangle();
+                    rectangle.Stroke = Brushes.Black;
+                    rectangle.StrokeThickness = 3;
+                    rectangle.Fill = new SolidColorBrush(Colors.Orange);
+                    rectangle.Fill.Opacity = 0.9;
+                    Canvas1.Children.Add(rectangle);
                 }
                 else
                 {
-                    oldX = ((Rectangle)Canvas1.Children[isInto]).Width + Canvas.GetLeft(Canvas1.Children[isInto]);
-                    oldY = ((Rectangle)Canvas1.Children[isInto]).Height + Canvas.GetTop(Canvas1.Children[isInto]);
+                    if (side == 0)
+                    {
+                        oldX = x1 - Canvas.GetLeft(Canvas1.Children[idInto]);
+                        oldY = y1 - Canvas.GetTop(Canvas1.Children[idInto]);
+                    }
+                    else
+                    {
+                        oldX = ((Rectangle)Canvas1.Children[idInto]).Width + Canvas.GetLeft(Canvas1.Children[idInto]);
+                        oldY = ((Rectangle)Canvas1.Children[idInto]).Height + Canvas.GetTop(Canvas1.Children[idInto]);
+                    }
+                }
+            }
+            else
+            {
+                if (side == 4)
+                {
+                    arrow = new Arrow();
+                    arrow.Start = (Rectangle)Canvas1.Children[idInto];
+                    arrow.Finish = (Rectangle)Canvas1.Children[idInto]; 
+                    arrow.Move();
+                    arrow.Stroke = Brushes.Black;
+                    arrow.StrokeThickness = 2;
+                    Canvas1.Children.Add(arrow);
                 }
             }
         }
@@ -143,7 +175,7 @@ namespace Pencil
         {
             Canvas1.Children.Clear();
             side = 0;
-            isInto = -1;
+            idInto = -1;
         }
 
         private void OnMouseUp(object sender, MouseButtonEventArgs e)
