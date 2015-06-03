@@ -1,47 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 
 namespace Pencil
 {
-    public class Arrow: Shape
+    class MyLine
     {
-        public double X1 { get; set; }
-        public double Y1 { get; set; }
-        public double X2 { get; set; }
-        public double Y2 { get; set; }
-        public Rectangle Start { get; set; }
-        public Rectangle Finish { get; set; }
+        private MyRectangle _rect1 = null;
+        private MyRectangle _rect2 = null;
+        private readonly Line _line;
+        private int id;
 
-        protected override Geometry DefiningGeometry
+        public MyLine(Canvas canvas, bool dash)
         {
-            get
+            _line = new Line
             {
-                LineGeometry line = new LineGeometry(
-                   new Point(X1, Y1),
-                      new Point(X2, Y2));
-                return line;
+                Fill = Brushes.Black,
+                Stroke = Brushes.Black,
+                StrokeThickness = 2
+            };
+
+            if (dash)
+                _line.StrokeDashArray = new DoubleCollection { 2, 2 };
+
+            canvas.Children.Add(_line);
+        }
+
+        public int Id
+        {
+            get { return id; }
+            set
+            {
+                id = value;
+                _line.Tag = id;
             }
         }
 
-        public void Move()
+        public Line GetLine()
         {
-            X1 = Canvas.GetLeft(Start) + Start.Width / 2;
-            Y1 = Canvas.GetTop(Start) + Start.Height;
-            X2 = Canvas.GetLeft(Finish) + Finish.Width / 2;
-            Y2 = Canvas.GetTop(Finish);
+            return _line;
         }
+
+        public MyRectangle Rect1
+        {
+            get{ return _rect1; }
+            set
+            {
+                _rect1 = value;
+            }
+        }
+
+        public MyRectangle Rect2
+        {
+            get { return _rect2; }
+            set
+            {
+                _rect2 = value;
+            }
+        }
+
     }
 }

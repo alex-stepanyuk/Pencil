@@ -70,7 +70,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyCanvas.cs" />
     <Compile Include="MyLine.cs" />
+    <Compile Include="MyRectangle.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

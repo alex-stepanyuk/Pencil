@@ -24,3 +24,17 @@ C:\Users\Александр\Documents\Visual Studio 2012\Projects\Pencil1\Pencil
 C:\Users\Александр\Documents\Visual Studio 2012\Projects\Pencil1\Pencil\obj\Debug\Pencil.g.resources
 C:\Users\Александр\Documents\Visual Studio 2012\Projects\Pencil1\Pencil\obj\Debug\Pencil.Properties.Resources.resources
 C:\Users\Александр\Documents\Visual Studio 2012\Projects\Pencil1\Pencil\obj\Debug\Pencil.csproj.GenerateResource.Cache
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\bin\Debug\Pencil.exe.config
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil.exe
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil.pdb
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\bin\Debug\Pencil.exe
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\bin\Debug\Pencil.pdb
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil.csprojResolveAssemblyReference.cache
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\MainWindow.baml
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\MainWindow.g.cs
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\App.g.cs
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil_MarkupCompile.cache
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil.g.resources
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil.Properties.Resources.resources
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil.csproj.GenerateResource.Cache
+C:\Users\Alex\Documents\Visual Studio 2012\Projects\Pencil1 — копия\Pencil\obj\Debug\Pencil_MarkupCompile.lref
