@@ -297,8 +297,10 @@ namespace Pencil
         {
             if (_canvas.Rectangles.Any(s => s.Id == _canvas.GetId()))
             {
-                Canvas1.Children.Remove(_canvas.Rectangles.First(s => s.Id == _canvas.GetId()).Rect());
-                _canvas.Rectangles.Remove(_canvas.Rectangles.First(s => s.Id == _canvas.GetId()));
+                MyRectangle temp = _canvas.Rectangles.First(s => s.Id == _canvas.GetId());
+                temp.RemoveLines(Canvas1);
+                Canvas1.Children.Remove(temp.Rect());
+                _canvas.Rectangles.Remove(temp);
             }
         }
 

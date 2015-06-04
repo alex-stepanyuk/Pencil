@@ -120,6 +120,23 @@ namespace Pencil
             }
         }
 
+        public void RemoveLines(Canvas canvas)
+        {
+            foreach (var line in _startLines)
+            {
+                line.Rect2._endLines.Remove(line);
+                canvas.Children.Remove(line.GetLine());
+            }
+
+            foreach (var line in _endLines)
+            {
+                line.Rect1._startLines.Remove(line);
+                canvas.Children.Remove(line.GetLine());
+            }
+
+            _startLines.Clear();
+            _endLines.Clear();
+        }
 
     }
 }
