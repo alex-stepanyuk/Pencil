@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace Pencil
 {
-    class MyCanvas
+    class MyView
     {
         private Guid _id;        //id фигуры внутри которой мышка
         private int _side;      //сторона фигуры над которой мышка        
@@ -15,7 +15,7 @@ namespace Pencil
         public readonly List<MyRectangle> Rectangles;
         public readonly List<MyLine> Lines;
 
-        public MyCanvas()
+        public MyView()
         {
             Rectangles = new List<MyRectangle>();
             Lines = new List<MyLine>();
@@ -57,68 +57,20 @@ namespace Pencil
         {
             if (Rectangles.Any(s => s.Id == _id))
             {
-                Rectangles.First(s => s.Id == _id).X = mouseX - OldX;
-                Rectangles.First(s => s.Id == _id).Y = mouseY - OldY;
+                Rectangles.First(s => s.Id == _id).Move(OldX, OldY, mouseX, mouseY);
             }
         }
 
         public void ResizeRect(int mouseX, int mouseY)
         {
-            switch (_side)
-            {
-                case 1: 
-                    Rectangles.First(s => s.Id == _id).X = mouseX;
-                    Rectangles.First(s => s.Id == _id).Width = OldX - Rectangles.First(s => s.Id == _id).X; 
-                    break;
-                case 2: 
-                    Rectangles.First(s => s.Id == _id).Y = mouseY;
-                    Rectangles.First(s => s.Id == _id).Height = OldY - Rectangles.First(s => s.Id == _id).Y; 
-                    break;
-                case 3: 
-                    Rectangles.First(s => s.Id == _id).Width = mouseX - Rectangles.First(s => s.Id == _id).X; 
-                    break;
-                case 4: 
-                    Rectangles.First(s => s.Id == _id).Height = mouseY - Rectangles.First(s => s.Id == _id).Y; 
-                    break;
-            }
+            MyRectangle temp = Rectangles.First(s => s.Id == _id);
+            temp.Resize(OldX, OldY, mouseX, mouseY, _side);
         }
 
-        public void DrawRect(int mouseX, int mouseY, MyRectangle rect)
-        {
-            if (mouseX > OldX)
-            {
-                rect.Width = mouseX - OldX;
-                rect.X = OldX;
-            }
-            else
-            {
-                rect.Width = OldX - mouseX ;
-                rect.X = mouseX;
-            }
-
-            if (mouseY > OldY)
-            {
-                rect.Height = mouseY - OldY;
-                rect.Y = OldY;
-            }
-            else
-            {
-                rect.Height = OldY - mouseY;
-                rect.Y = mouseY;
-            }
-        }
-
-        public void AddRect(MyRectangle rect)
+        public void AddRect(Canvas canvas, MyRectangle rect)
         {
             Rectangles.Add(rect);
-        }
-
-        public void DrawLine(int mouseX, int mouseY, MyLine line)
-        {
-            line.GetLine().X1 = OldX;
-            line.GetLine().Y1 = OldY;
-            line.GetLine().X2 = mouseX;
-            line.GetLine().Y2 = mouseY;
+            canvas.Children.Add(rect.GetRect());
         }
 
         public void AddLine(MyLine line)

@@ -6,33 +6,30 @@ using System.Windows.Shapes;
 
 namespace Pencil
 {
-    class MyRectangle
+    class MyRectangle: MyBaseShape
     {
         private Rectangle _rect;
-        private Guid _id;
         private readonly List<MyLine> _startLines;
         private readonly List<MyLine> _endLines;
 
-        public void UpdateProperty(string property)
+        public void UpdateX()
         {
-            switch (property)
-            {
-                case "X":
-                    foreach (var line in _startLines)
-                        line.GetLine().X1 = X + Width/ 2;
-                    foreach (var line in _endLines)
-                        line.GetLine().X2 = X + Width / 2;
-                    break;
-                case "Y":
-                    foreach (var line in _startLines)
-                        line.GetLine().Y1 = Y + Height / 2;
-                    foreach (var line in _endLines)
-                        line.GetLine().Y2 = Y + Height / 2;
-                    break;
-            }
+            foreach (var line in _startLines)
+                line.GetLine().X1 = X + Width/ 2;
+            foreach (var line in _endLines)
+                line.GetLine().X2 = X + Width / 2;
         }
 
-        public MyRectangle(Canvas canvas, bool dash)
+        public void UpdateY()
+        {
+            
+            foreach (var line in _startLines)
+                line.GetLine().Y1 = Y + Height / 2;
+            foreach (var line in _endLines)
+                line.GetLine().Y2 = Y + Height / 2;
+        }
+
+        public MyRectangle(int dash)
         {
             _rect = new Rectangle
             {
@@ -41,17 +38,16 @@ namespace Pencil
                 Fill = new SolidColorBrush(Colors.Orange) {Opacity = 0.9}
             };
 
-            if (dash)
+            if (dash == 2)
                 _rect.StrokeDashArray = new DoubleCollection { 2, 2 };
             
-            canvas.Children.Add(_rect);
             Id = Guid.NewGuid();
 
             _startLines = new List<MyLine>();
             _endLines = new List<MyLine>();
         }
 
-        public Rectangle Rect()
+        public Rectangle GetRect()
         {
             return _rect;
         }
@@ -72,7 +68,7 @@ namespace Pencil
             set
             {
                 Canvas.SetLeft(_rect, value);
-                UpdateProperty("X");
+                UpdateX();
             }
         }
 
@@ -82,7 +78,7 @@ namespace Pencil
             set
             {
                 Canvas.SetTop(_rect, value);
-                UpdateProperty("Y");
+                UpdateY();
             }
         }
 
@@ -92,7 +88,7 @@ namespace Pencil
             set
             {
                 _rect.Width = value;
-                UpdateProperty("X");
+                UpdateX();
             }
         }
 
@@ -102,7 +98,7 @@ namespace Pencil
             set
             {
                 _rect.Height = value;
-                UpdateProperty("Y");
+                UpdateY();
             }
         }
 
@@ -136,6 +132,58 @@ namespace Pencil
 
             _startLines.Clear();
             _endLines.Clear();
+        }
+
+        public override void Draw(int x1, int y1, int x2, int y2)
+        {
+            if (x2 > x1)
+            {
+                Width = x2 - x1;
+                X = x1;
+            }
+            else
+            {
+                Width = x1 - x2;
+                X = x2;
+            }
+
+            if (y2 > y1)
+            {
+                Height = y2 - y1;
+                Y = y1;
+            }
+            else
+            {
+                Height = y1 - y2;
+                Y = y2;
+            }
+        }
+
+        public void Resize(int x1, int y1, int x2, int y2, int side)
+        {
+            switch (side)
+            {
+                case 1:
+                    X = x2;
+                    Width = x1 - X;
+                    break;
+                case 2:
+                    Y = y2;
+                    Height = y1 - Y;
+                    break;
+                case 3:
+                    Width = x2 - X;
+                    break;
+                case 4:
+                    Height = y2 - Y;
+                    break;
+            }
+        }
+
+        public void Move(int x1, int y1, int x2, int y2)
+        {
+            X = x2 - x1;
+            Y = y2 - y1;
         }
 
     }

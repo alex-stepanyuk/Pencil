@@ -1,18 +1,17 @@
-﻿using System.ComponentModel;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Pencil
 {
-    class MyLine
+    class MyLine: MyBaseShape
     {
         private MyRectangle _rect1 = null;
         private MyRectangle _rect2 = null;
         private readonly Line _line;
-        private int id;
 
-        public MyLine(Canvas canvas, bool dash)
+        public MyLine(int dash)
         {
             _line = new Line
             {
@@ -21,19 +20,19 @@ namespace Pencil
                 StrokeThickness = 2
             };
 
-            if (dash)
+            if (dash == 2)
                 _line.StrokeDashArray = new DoubleCollection { 2, 2 };
 
-            canvas.Children.Add(_line);
+            Id = Guid.NewGuid();
         }
 
-        public int Id
+        public Guid Id
         {
-            get { return id; }
+            get { return _id; }
             set
             {
-                id = value;
-                _line.Tag = id;
+                _id = value;
+                _line.Tag = _id;
             }
         }
 
@@ -58,6 +57,14 @@ namespace Pencil
             {
                 _rect2 = value;
             }
+        }
+
+        public override void Draw(int x1, int y1, int x2, int y2)
+        {
+            GetLine().X1 = x1;
+            GetLine().Y1 = y1;
+            GetLine().X2 = x2;
+            GetLine().Y2 = y2;
         }
 
     }

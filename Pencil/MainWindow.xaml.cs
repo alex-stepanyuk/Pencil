@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace Pencil
 {
@@ -157,21 +154,22 @@ namespace Pencil
         }
         */
 
-        private MyCanvas _canvas;
+        private MyView _view;
         private MyLine _tempLine;
-        private bool _dash = true;
+        private int _dash = 1;
         private bool _figure = false;
 
         public MainWindow()
         {
             InitializeComponent();
-            _canvas = new MyCanvas();
+            _view = new MyView();
 
-            _canvas.AddRect(new MyRectangle(Canvas1, _dash));
-            _canvas.Rectangles[0].X = 100;
-            _canvas.Rectangles[0].Y = 100;
-            _canvas.Rectangles[0].Height = 100;
-            _canvas.Rectangles[0].Width = 100;
+            _view.AddRect(Canvas1, new MyRectangle(_dash));
+            _view.Rectangles[0].X = 100;
+            _view.Rectangles[0].Y = 100;
+            _view.Rectangles[0].Height = 100;
+            _view.Rectangles[0].Width = 100;
+           
             
         }
 
@@ -187,28 +185,28 @@ namespace Pencil
             {
                 if (_figure)
                 {
-                    if (_canvas.GetId() != Guid.Empty)
+                    if (_view.GetId() != Guid.Empty)
                     {
-                        if (_canvas.Rectangles.Any(s => s.Id == _canvas.GetId()))
+                        if (_view.Rectangles.Any(s => s.Id == _view.GetId()))
                         {
-                            if (_canvas.GetSide() == 0)
+                            if (_view.GetSide() == 0)
                             {
-                                _canvas.MoveRect(mouseX, mouseY);
+                                _view.MoveRect(mouseX, mouseY);
                             }
                             else
                             {
-                                _canvas.ResizeRect(mouseX, mouseY);
+                                _view.ResizeRect(mouseX, mouseY);
                             }
                         }
                     }
                     else
                     {
-                        _canvas.DrawRect(mouseX, mouseY, _canvas.Rectangles.Last());
+                        _view.Rectangles.Last().Draw(_view.OldX, _view.OldY, mouseX, mouseY);
                     }
                 }
                 else
                 {
-                    _canvas.DrawLine(mouseX, mouseY, _tempLine);
+                    _tempLine.Draw(_view.OldX, _view.OldY, mouseX, mouseY);
                 }
             }
 
@@ -222,42 +220,43 @@ namespace Pencil
 
             if (_figure)
             {
-                if (_canvas.IsInto(mouseX, mouseY))
+                if (_view.IsInto(mouseX, mouseY))
                 {
-                    if (_canvas.Rectangles.Any(s => s.Id == _canvas.GetId()))
+                    if (_view.Rectangles.Any(s => s.Id == _view.GetId()))
                     {
-                        MyRectangle temp = _canvas.Rectangles.First(s => s.Id == _canvas.GetId());
+                        MyRectangle temp = _view.Rectangles.First(s => s.Id == _view.GetId());
 
-                        if (_canvas.GetSide() == 0)
+                        if (_view.GetSide() == 0)
                         {
-                            _canvas.OldX = mouseX - (int) temp.X;
-                            _canvas.OldY = mouseY - (int) temp.Y;
+                            _view.OldX = mouseX - (int) temp.X;
+                            _view.OldY = mouseY - (int) temp.Y;
                         }
                         else
                         {
-                            _canvas.OldX = (int) (temp.Width + temp.X);
-                            _canvas.OldY = (int) (temp.Height + temp.Y);
+                            _view.OldX = (int) (temp.Width + temp.X);
+                            _view.OldY = (int) (temp.Height + temp.Y);
                         }
                     }
                 }
                 else
                 {
-                    _canvas.OldX = mouseX;
-                    _canvas.OldY = mouseY;
-                    _canvas.AddRect(new MyRectangle(Canvas1, _dash));
+                    _view.OldX = mouseX;
+                    _view.OldY = mouseY;
+                    _view.AddRect(Canvas1, new MyRectangle(_dash));
                 }
             }
             else
             {
-                if (_canvas.IsInto(mouseX, mouseY))
+                if (_view.IsInto(mouseX, mouseY))
                 {
-                    _canvas.OldX = mouseX;
-                    _canvas.OldY = mouseY;
-                    _tempLine = new MyLine(Canvas1, _dash);
+                    _view.OldX = mouseX;
+                    _view.OldY = mouseY;
+                    _tempLine = new MyLine(_dash);
+                    Canvas1.Children.Add(_tempLine.GetLine());
                 }
             }
 
-            Label2.Content = (_canvas.GetId()== Guid.Empty) + " | " + _canvas.GetSide();
+            Label2.Content = (_view.GetId()== Guid.Empty) + " | " + _view.GetSide();
         }
 
         private void OnMouseUp(object sender, MouseButtonEventArgs e)
@@ -267,23 +266,23 @@ namespace Pencil
 
             if (!_figure)
             {
-                if (_canvas.Rectangles.Any(s => s.Id == _canvas.GetId()))
+                if (_view.Rectangles.Any(s => s.Id == _view.GetId()))
                 {
-                    MyRectangle oldRect = _canvas.Rectangles.First(s => s.Id == _canvas.GetId());
-                    if (_canvas.IsInto(mouseX, mouseY))
+                    MyRectangle oldRect = _view.Rectangles.First(s => s.Id == _view.GetId());
+                    if (_view.IsInto(mouseX, mouseY))
                     {
                         oldRect.AddLine(_tempLine, true);
-                        _canvas.Rectangles.First(s => s.Id == _canvas.GetId()).AddLine(_tempLine, false);
+                        _view.Rectangles.First(s => s.Id == _view.GetId()).AddLine(_tempLine, false);
 
                         _tempLine.Rect1 = oldRect;
-                        _tempLine.Rect2 = _canvas.Rectangles.First(s => s.Id == _canvas.GetId());
+                        _tempLine.Rect2 = _view.Rectangles.First(s => s.Id == _view.GetId());
 
-                        _tempLine.Rect1.UpdateProperty("X");
-                        _tempLine.Rect1.UpdateProperty("Y");
-                        _tempLine.Rect2.UpdateProperty("X");
-                        _tempLine.Rect2.UpdateProperty("Y");
+                        _tempLine.Rect1.UpdateX();
+                        _tempLine.Rect1.UpdateY();
+                        _tempLine.Rect2.UpdateX();
+                        _tempLine.Rect2.UpdateY();
 
-                        _canvas.AddLine(_tempLine);
+                        _view.AddLine(_tempLine);
                     }
                     else
                     {
@@ -295,18 +294,19 @@ namespace Pencil
         
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
         {
-            if (_canvas.Rectangles.Any(s => s.Id == _canvas.GetId()))
+            if (_view.Rectangles.Any(s => s.Id == _view.GetId()))
             {
-                MyRectangle temp = _canvas.Rectangles.First(s => s.Id == _canvas.GetId());
+                MyRectangle temp = _view.Rectangles.First(s => s.Id == _view.GetId());
                 temp.RemoveLines(Canvas1);
-                Canvas1.Children.Remove(temp.Rect());
-                _canvas.Rectangles.Remove(temp);
+                Canvas1.Children.Remove(temp.GetRect());
+                _view.Rectangles.Remove(temp);
             }
         }
 
         private void RadioType_Checked(object sender, RoutedEventArgs e)
         {
-            _dash = !_dash;
+            if (Rb1.IsChecked == true) _dash = 1; 
+            else if (Rb2.IsChecked == true) _dash = 2;
         }
 
         private void RadioFigure_Checked(object sender, RoutedEventArgs e)
