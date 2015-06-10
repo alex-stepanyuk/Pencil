@@ -26,7 +26,7 @@ namespace Pencil
             Id = Guid.NewGuid();
         }
 
-        public Guid Id
+        public override Guid Id
         {
             get { return _id; }
             set
@@ -36,6 +36,30 @@ namespace Pencil
             }
         }
 
+        public override double X
+        {
+            get { return _line.X1; }
+            set { _line.X1 = value; }
+        }
+
+        public override double Y
+        {
+            get { return _line.Y1; }
+            set { _line.Y1 = value; }
+        }
+
+        public double X2
+        {
+            get { return _line.X2; }
+            set { _line.X2 = value; }
+        }
+
+        public double Y2
+        {
+            get { return _line.Y2; }
+            set { _line.Y2 = value; }
+        }
+
         public Line GetLine()
         {
             return _line;
@@ -43,28 +67,22 @@ namespace Pencil
 
         public MyRectangle Rect1
         {
-            get{ return _rect1; }
-            set
-            {
-                _rect1 = value;
-            }
+            get { return _rect1; }
+            set { _rect1 = value; }
         }
 
         public MyRectangle Rect2
         {
             get { return _rect2; }
-            set
-            {
-                _rect2 = value;
-            }
+            set { _rect2 = value; }
         }
 
         public override void Draw(int x1, int y1, int x2, int y2)
         {
-            GetLine().X1 = x1;
-            GetLine().Y1 = y1;
-            GetLine().X2 = x2;
-            GetLine().Y2 = y2;
+            X = x1;
+            Y = y1;
+            X2 = x2;
+            Y2 = y2;
         }
 
     }

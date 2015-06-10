@@ -15,18 +15,17 @@ namespace Pencil
         public void UpdateX()
         {
             foreach (var line in _startLines)
-                line.GetLine().X1 = X + Width/ 2;
+                line.X = X + Width/ 2;
             foreach (var line in _endLines)
-                line.GetLine().X2 = X + Width / 2;
+                line.X2 = X + Width / 2;
         }
 
         public void UpdateY()
         {
-            
             foreach (var line in _startLines)
-                line.GetLine().Y1 = Y + Height / 2;
+                line.Y = Y + Height / 2;
             foreach (var line in _endLines)
-                line.GetLine().Y2 = Y + Height / 2;
+                line.Y2 = Y + Height / 2;
         }
 
         public MyRectangle(int dash)
@@ -52,7 +51,7 @@ namespace Pencil
             return _rect;
         }
 
-        public Guid Id
+        public override Guid Id
         {
             get { return _id; }
             set
@@ -62,7 +61,7 @@ namespace Pencil
             }
         }
 
-        public double X
+        public override double X
         {
             get { return Canvas.GetLeft(_rect); }
             set
@@ -72,7 +71,7 @@ namespace Pencil
             }
         }
 
-        public double Y
+        public override double Y
         {
             get { return Canvas.GetTop(_rect); }
             set
@@ -159,22 +158,22 @@ namespace Pencil
             }
         }
 
-        public void Resize(int x1, int y1, int x2, int y2, int side)
+        public void Resize(int x1, int y1, int x2, int y2, SideType side)
         {
             switch (side)
             {
-                case 1:
+                case SideType.Left:
                     X = x2;
                     Width = x1 - X;
                     break;
-                case 2:
+                case SideType.Top:
                     Y = y2;
                     Height = y1 - Y;
                     break;
-                case 3:
+                case SideType.Right:
                     Width = x2 - X;
                     break;
-                case 4:
+                case SideType.Bottom:
                     Height = y2 - Y;
                     break;
             }
@@ -186,5 +185,18 @@ namespace Pencil
             Y = y2 - y1;
         }
 
+        public SideType IsInto(int mouseX, int mouseY)
+        {
+            if ((X - 3 < mouseX) && (X + Width + 3 > mouseX) && (Y - 3 < mouseY) && (Y + Height + 3 > mouseY))
+            {
+                if ((mouseX >= X - 3) && (mouseX <= X + 3)) return SideType.Left;
+                else if ((mouseX >= X + Width - 3) && (mouseX <= X + Width + 3)) return SideType.Right;
+                else if ((mouseY >= Y - 3) && (mouseY <= Y + 3)) return SideType.Top;
+                else if ((mouseY >= Y + Height - 3) && (mouseY <= Y + Height + 3)) return SideType.Bottom;
+                else return SideType.Into;
+            }
+            return SideType.Out;
+        }
+        
     }
 }

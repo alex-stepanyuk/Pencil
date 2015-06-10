@@ -8,7 +8,7 @@ namespace Pencil
     class MyView
     {
         private Guid _id;        //id фигуры внутри которой мышка
-        private int _side;      //сторона фигуры над которой мышка        
+        private SideType _side;      //сторона фигуры над которой мышка        
         public int OldX;
         public int OldY;
 
@@ -26,29 +26,26 @@ namespace Pencil
             return _id;
         }
 
-        public int GetSide()
+        public SideType GetSide()
         {
             return _side;
         }
 
-        public bool IsInto(int mouseX, int mouseY)
+        public bool IsIntoAny(int mouseX, int mouseY)
         {
             for (int i = Rectangles.Count - 1; i >= 0; i--)
             {
                 MyRectangle rect = Rectangles[i];
-                if ((rect.X - 3 < mouseX) && (rect.X + rect.Width + 3 > mouseX) && (rect.Y - 3 < mouseY) && (rect.Y + rect.Height + 3 > mouseY))
+                SideType temp = rect.IsInto(mouseX, mouseY);
+                if (temp != SideType.Out)
                 {
                     _id = rect.Id;
-                    if ((mouseX >= rect.X - 3) && (mouseX <= rect.X + 3)) _side = 1;
-                    else if ((mouseX >= rect.X + rect.Width - 3) && (mouseX <= rect.X + rect.Width + 3)) _side = 3;
-                    else if ((mouseY >= rect.Y - 3) && (mouseY <= rect.Y + 3)) _side = 2;
-                    else if ((mouseY >= rect.Y + rect.Height - 3) && (mouseY <= rect.Y + rect.Height + 3)) _side = 4;
-                    else _side = 0;
+                    _side = temp;
                     return true;
                 }
             }
 
-            _side = 0;
+            _side = SideType.Out;
             _id = Guid.Empty;
             return false;
         }
@@ -76,6 +73,56 @@ namespace Pencil
         public void AddLine(MyLine line)
         {
             Lines.Add(line);
+        }
+
+        public void MouseMove(int mouseX, int mouseY)
+        {
+            if (_id != Guid.Empty)
+            {
+                if (Rectangles.Any(s => s.Id == _id))
+                {
+                    if (_side == SideType.Into)
+                    {
+                        MoveRect(mouseX, mouseY);
+                    }
+                    else
+                    {
+                        ResizeRect(mouseX, mouseY);
+                    }
+                }
+            }
+            else
+            {
+                Rectangles.Last().Draw(OldX, OldY, mouseX, mouseY);
+            }
+        }
+
+        public void MouseDown(int mouseX, int mouseY, Canvas canvas, int dash)
+        {
+            if (IsIntoAny(mouseX, mouseY))
+            {
+                if (Rectangles.Any(s => s.Id == _id))
+                {
+                    MyRectangle temp = Rectangles.First(s => s.Id == _id);
+
+                    if (_side == SideType.Into)
+                    {
+                        OldX = mouseX - (int)temp.X;
+                        OldY = mouseY - (int)temp.Y;
+                    }
+                    else
+                    {
+                        OldX = (int)(temp.Width + temp.X);
+                        OldY = (int)(temp.Height + temp.Y);
+                    }
+                }
+            }
+            else
+            {
+                OldX = mouseX;
+                OldY = mouseY;
+                AddRect(canvas, new MyRectangle(dash));
+            }
         }
 
     }
