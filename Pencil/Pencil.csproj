@@ -56,7 +56,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Shapes\Usual\MyUsualRectangle.cs" />
+    <Compile Include="Shapes\Usual\MyUsualLine.cs" />
+    <Compile Include="Shapes\Dotten\MyDottenRectangle.cs" />
     <Compile Include="SideType.cs" />
+    <Compile Include="Shapes\Dotten\MyDottenLine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -71,10 +75,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyBaseShape.cs" />
+    <Compile Include="Shapes\Base\MyBaseShape.cs" />
     <Compile Include="MyView.cs" />
-    <Compile Include="MyLine.cs" />
-    <Compile Include="MyRectangle.cs" />
+    <Compile Include="Shapes\Base\MyBaseLine.cs" />
+    <Compile Include="Shapes\Base\MyBaseRectangle.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

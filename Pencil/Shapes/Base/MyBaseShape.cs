@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Windows;
 
-namespace Pencil
+namespace Pencil.Shapes.Base
 {
     abstract class MyBaseShape
     {

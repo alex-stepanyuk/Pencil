@@ -4,13 +4,13 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Pencil
+namespace Pencil.Shapes.Base
 {
-    class MyRectangle: MyBaseShape
+    class MyBaseRectangle: MyBaseShape
     {
-        private Rectangle _rect;
-        private readonly List<MyLine> _startLines;
-        private readonly List<MyLine> _endLines;
+        protected Rectangle _rect;
+        protected List<MyBaseLine> _startLines;
+        protected List<MyBaseLine> _endLines;
 
         public void UpdateX()
         {
@@ -28,7 +28,7 @@ namespace Pencil
                 line.Y2 = Y + Height / 2;
         }
 
-        public MyRectangle(int dash)
+        public MyBaseRectangle()
         {
             _rect = new Rectangle
             {
@@ -36,14 +36,11 @@ namespace Pencil
                 StrokeThickness = 3,
                 Fill = new SolidColorBrush(Colors.Orange) {Opacity = 0.9}
             };
-
-            if (dash == 2)
-                _rect.StrokeDashArray = new DoubleCollection { 2, 2 };
             
             Id = Guid.NewGuid();
 
-            _startLines = new List<MyLine>();
-            _endLines = new List<MyLine>();
+            _startLines = new List<MyBaseLine>();
+            _endLines = new List<MyBaseLine>();
         }
 
         public Rectangle GetRect()
@@ -101,7 +98,7 @@ namespace Pencil
             }
         }
 
-        public void AddLine(MyLine line, bool isStart)
+        public void AddLine(MyBaseLine line, bool isStart)
         {
             if (isStart)
             {

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using Pencil.Shapes;
+using Pencil.Shapes.Base;
+using Pencil.Shapes.Dotten;
+using Pencil.Shapes.Usual;
 
 namespace Pencil
 {
@@ -12,13 +16,13 @@ namespace Pencil
         public int OldX;
         public int OldY;
 
-        public readonly List<MyRectangle> Rectangles;
-        public readonly List<MyLine> Lines;
+        public readonly List<MyBaseRectangle> Rectangles;
+        public readonly List<MyBaseLine> Lines;
 
         public MyView()
         {
-            Rectangles = new List<MyRectangle>();
-            Lines = new List<MyLine>();
+            Rectangles = new List<MyBaseRectangle>();
+            Lines = new List<MyBaseLine>();
         }
 
         public Guid GetId()
@@ -35,7 +39,7 @@ namespace Pencil
         {
             for (int i = Rectangles.Count - 1; i >= 0; i--)
             {
-                MyRectangle rect = Rectangles[i];
+                MyBaseRectangle rect = Rectangles[i];
                 SideType temp = rect.IsInto(mouseX, mouseY);
                 if (temp != SideType.Out)
                 {
@@ -60,17 +64,17 @@ namespace Pencil
 
         public void ResizeRect(int mouseX, int mouseY)
         {
-            MyRectangle temp = Rectangles.First(s => s.Id == _id);
+            MyBaseRectangle temp = Rectangles.First(s => s.Id == _id);
             temp.Resize(OldX, OldY, mouseX, mouseY, _side);
         }
 
-        public void AddRect(Canvas canvas, MyRectangle rect)
+        public void AddRect(Canvas canvas, MyBaseRectangle rect)
         {
             Rectangles.Add(rect);
             canvas.Children.Add(rect.GetRect());
         }
 
-        public void AddLine(MyLine line)
+        public void AddLine(MyBaseLine line)
         {
             Lines.Add(line);
         }
@@ -103,7 +107,7 @@ namespace Pencil
             {
                 if (Rectangles.Any(s => s.Id == _id))
                 {
-                    MyRectangle temp = Rectangles.First(s => s.Id == _id);
+                    MyBaseRectangle temp = Rectangles.First(s => s.Id == _id);
 
                     if (_side == SideType.Into)
                     {
@@ -121,7 +125,10 @@ namespace Pencil
             {
                 OldX = mouseX;
                 OldY = mouseY;
-                AddRect(canvas, new MyRectangle(dash));
+                if (dash == 1)
+                    AddRect(canvas, new MyUsualRectangle());
+                else if (dash == 2)
+                    AddRect(canvas, new MyDottenRectangle());
             }
         }
 

@@ -2,6 +2,10 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Pencil.Shapes;
+using Pencil.Shapes.Base;
+using Pencil.Shapes.Dotten;
+using Pencil.Shapes.Usual;
 
 namespace Pencil
 {
@@ -9,7 +13,7 @@ namespace Pencil
     {
 
         private readonly MyView _view;
-        private MyLine _tempLine;
+        private MyBaseLine _tempLine;
         private int _dash = 1;
         private bool _figure;
 
@@ -57,7 +61,11 @@ namespace Pencil
                 {
                     _view.OldX = mouseX;
                     _view.OldY = mouseY;
-                    _tempLine = new MyLine(_dash);
+
+                    if(_dash == 1)
+                        _tempLine = new MyUsualLine();
+                    else if (_dash == 2)
+                        _tempLine = new MyDottenLine();
                     Canvas1.Children.Add(_tempLine.GetLine());
                 }
             }
@@ -74,7 +82,7 @@ namespace Pencil
             {
                 if (_view.Rectangles.Any(s => s.Id == _view.GetId()))
                 {
-                    MyRectangle oldRect = _view.Rectangles.First(s => s.Id == _view.GetId());
+                    MyBaseRectangle oldRect = _view.Rectangles.First(s => s.Id == _view.GetId());
                     if (_view.IsIntoAny(mouseX, mouseY))
                     {
                         oldRect.AddLine(_tempLine, true);
@@ -102,7 +110,7 @@ namespace Pencil
         {
             if (_view.Rectangles.Any(s => s.Id == _view.GetId()))
             {
-                MyRectangle temp = _view.Rectangles.First(s => s.Id == _view.GetId());
+                MyBaseRectangle temp = _view.Rectangles.First(s => s.Id == _view.GetId());
                 temp.RemoveLines(Canvas1);
                 Canvas1.Children.Remove(temp.GetRect());
                 _view.Rectangles.Remove(temp);

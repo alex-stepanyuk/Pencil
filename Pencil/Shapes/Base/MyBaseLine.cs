@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Pencil
+namespace Pencil.Shapes.Base
 {
-    class MyLine: MyBaseShape
+    class MyBaseLine: MyBaseShape
     {
-        private MyRectangle _rect1 = null;
-        private MyRectangle _rect2 = null;
-        private readonly Line _line;
+        private MyBaseRectangle _rect1 = null;
+        private MyBaseRectangle _rect2 = null;
+        protected Line _line;
 
-        public MyLine(int dash)
+        public MyBaseLine()
         {
             _line = new Line
             {
@@ -19,14 +18,11 @@ namespace Pencil
                 Stroke = Brushes.Black,
                 StrokeThickness = 2
             };
-
-            if (dash == 2)
-                _line.StrokeDashArray = new DoubleCollection { 2, 2 };
-
+            
             Id = Guid.NewGuid();
         }
 
-        public override Guid Id
+        public override sealed Guid Id
         {
             get { return _id; }
             set
@@ -65,13 +61,13 @@ namespace Pencil
             return _line;
         }
 
-        public MyRectangle Rect1
+        public MyBaseRectangle Rect1
         {
             get { return _rect1; }
             set { _rect1 = value; }
         }
 
-        public MyRectangle Rect2
+        public MyBaseRectangle Rect2
         {
             get { return _rect2; }
             set { _rect2 = value; }
