@@ -17,12 +17,6 @@ namespace Pencil.Shapes.Dotten
                 Fill = new SolidColorBrush(Colors.Orange) {Opacity = 0.9},
                 StrokeDashArray = new DoubleCollection {2, 2}
             };
-
-
-            Id = Guid.NewGuid();
-
-            _startLines = new List<MyBaseLine>();
-            _endLines = new List<MyBaseLine>();
         }
     }
 }

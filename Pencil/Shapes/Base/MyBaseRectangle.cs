@@ -30,12 +30,7 @@ namespace Pencil.Shapes.Base
 
         public MyBaseRectangle()
         {
-            _rect = new Rectangle
-            {
-                Stroke = Brushes.Black,
-                StrokeThickness = 3,
-                Fill = new SolidColorBrush(Colors.Orange) {Opacity = 0.9}
-            };
+            _rect = new Rectangle();
             
             Id = Guid.NewGuid();
 
@@ -184,7 +179,10 @@ namespace Pencil.Shapes.Base
 
         public SideType IsInto(int mouseX, int mouseY)
         {
-            if ((X - 3 < mouseX) && (X + Width + 3 > mouseX) && (Y - 3 < mouseY) && (Y + Height + 3 > mouseY))
+            bool bIsIntoX = (X - 3 < mouseX) && (X + Width + 3 > mouseX);
+            bool bIsIntoY = (Y - 3 < mouseY) && (Y + Height + 3 > mouseY);
+
+            if (bIsIntoX && bIsIntoY)
             {
                 if ((mouseX >= X - 3) && (mouseX <= X + 3)) return SideType.Left;
                 else if ((mouseX >= X + Width - 3) && (mouseX <= X + Width + 3)) return SideType.Right;

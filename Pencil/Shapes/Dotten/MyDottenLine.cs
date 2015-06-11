@@ -16,8 +16,6 @@ namespace Pencil.Shapes.Dotten
                 StrokeThickness = 2,
                 StrokeDashArray = new DoubleCollection {2, 2}
             };
-
-            Id = Guid.NewGuid();
         }
     }
 }

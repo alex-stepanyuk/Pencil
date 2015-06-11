@@ -12,12 +12,7 @@ namespace Pencil.Shapes.Base
 
         public MyBaseLine()
         {
-            _line = new Line
-            {
-                Fill = Brushes.Black,
-                Stroke = Brushes.Black,
-                StrokeThickness = 2
-            };
+            _line = new Line();
             
             Id = Guid.NewGuid();
         }
