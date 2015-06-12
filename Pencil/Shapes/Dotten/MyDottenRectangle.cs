@@ -17,6 +17,8 @@ namespace Pencil.Shapes.Dotten
                 Fill = new SolidColorBrush(Colors.Orange) {Opacity = 0.9},
                 StrokeDashArray = new DoubleCollection {2, 2}
             };
+
+            AllowedLines = new List<Type> { typeof(MyDottenLine) };
         }
     }
 }

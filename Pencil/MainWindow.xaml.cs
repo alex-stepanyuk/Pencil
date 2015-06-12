@@ -62,9 +62,9 @@ namespace Pencil
                     _view.OldX = mouseX;
                     _view.OldY = mouseY;
 
-                    if(_dash == 1)
+                    if (_dash == 1)
                         _tempLine = new MyUsualLine();
-                    else if (_dash == 2)
+                    else if ((_dash == 2))
                         _tempLine = new MyDottenLine();
                     Canvas1.Children.Add(_tempLine.GetLine());
                 }
@@ -83,20 +83,30 @@ namespace Pencil
                 if (_view.Rectangles.Any(s => s.Id == _view.GetId()))
                 {
                     MyBaseRectangle oldRect = _view.Rectangles.First(s => s.Id == _view.GetId());
+
                     if (_view.IsIntoAny(mouseX, mouseY))
                     {
-                        oldRect.AddLine(_tempLine, true);
-                        _view.Rectangles.First(s => s.Id == _view.GetId()).AddLine(_tempLine, false);
+                        MyBaseRectangle newRect = _view.Rectangles.First(s => s.Id == _view.GetId());
+                        
+                        if (oldRect.IsAllowLine(_tempLine) && newRect.IsAllowLine(_tempLine))
+                        {
+                            oldRect.AddLine(_tempLine, true);
+                            newRect.AddLine(_tempLine, false);
 
-                        _tempLine.Rect1 = oldRect;
-                        _tempLine.Rect2 = _view.Rectangles.First(s => s.Id == _view.GetId());
+                            _tempLine.Rect1 = oldRect;
+                            _tempLine.Rect2 = newRect;
 
-                        _tempLine.Rect1.UpdateX();
-                        _tempLine.Rect1.UpdateY();
-                        _tempLine.Rect2.UpdateX();
-                        _tempLine.Rect2.UpdateY();
+                            _tempLine.Rect1.UpdateX();
+                            _tempLine.Rect1.UpdateY();
+                            _tempLine.Rect2.UpdateX();
+                            _tempLine.Rect2.UpdateY();
 
-                        _view.AddLine(_tempLine);
+                            _view.AddLine(_tempLine);
+                        }
+                        else
+                        {
+                            Canvas1.Children.Remove(_tempLine.GetLine());
+                        }
                     }
                     else
                     {

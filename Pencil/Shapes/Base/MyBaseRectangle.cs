@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -11,6 +12,7 @@ namespace Pencil.Shapes.Base
         protected Rectangle _rect;
         protected List<MyBaseLine> _startLines;
         protected List<MyBaseLine> _endLines;
+        protected List<Type> AllowedLines;
 
         public void UpdateX()
         {
@@ -93,7 +95,7 @@ namespace Pencil.Shapes.Base
             }
         }
 
-        public void AddLine(MyBaseLine line, bool isStart)
+        public virtual void AddLine(MyBaseLine line, bool isStart)
         {
             if (isStart)
             {
@@ -192,6 +194,10 @@ namespace Pencil.Shapes.Base
             }
             return SideType.Out;
         }
-        
+
+        public bool IsAllowLine(MyBaseLine line)
+        {
+            return AllowedLines.Any(s => s == line.GetType());
+        }
     }
 }
